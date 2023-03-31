@@ -1,7 +1,21 @@
+import { IconButton } from "@mui/material";
 import Container from "@mui/material/Container";
+import EditIcon from "@mui/icons-material/Edit";
 import { DataGrid } from "@mui/x-data-grid";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserList } from "../../features/user/userSlice";
 
 export const UserTable = () => {
+  const { userStatus, users } = useSelector((store) => store.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (userStatus === "idle") {
+      dispatch(fetchUserList());
+    }
+  }, [userStatus, dispatch]);
+
   const contentColumn = [
     {
       field: "identificationCode",
@@ -47,7 +61,8 @@ export const UserTable = () => {
       <h1>Users</h1>
       <DataGrid
         sx={{ height: 810 }}
-        rows={[]}
+        rows={[...users]}
+        getRowId={(row) => row.identificationCode}
         columns={contentColumn.concat(viewColumn)}
         pageSize={10}
         rowsPerPageOptions={[10]}

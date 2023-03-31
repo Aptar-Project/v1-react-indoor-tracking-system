@@ -6,8 +6,16 @@ import GroupIcon from "@mui/icons-material/Group";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import { useDispatch } from "react-redux";
+import { accountActions } from "../../features/account/accountSlice";
 
 export const Sidebar = () => {
+  const dispatch = useDispatch();
+  /*  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(accountActions.login());
+  }; */
+
   return (
     <>
       <div className="sidebar">
@@ -54,8 +62,9 @@ export const Sidebar = () => {
               </li>
             </NavLink>
             <NavLink
-              to={"/login"}
+              to={"/"}
               onClick={() => {
+                dispatch(accountActions.logout());
                 localStorage.removeItem("token");
               }}
               style={{ textDecoration: "none" }}

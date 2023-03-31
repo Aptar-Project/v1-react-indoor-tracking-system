@@ -1,11 +1,25 @@
 import { IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { DataGrid } from "@mui/x-data-grid";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchSensorList } from "../../features/sensor/sensorSlice";
+import { fetchUserList } from "../../features/user/userSlice";
 
 export const AllElTable = () => {
-  const { users } = useSelector((store) => store.user);
-  const { sensors } = useSelector((store) => store.sensor);
+  const { users, userStatus } = useSelector((store) => store.user);
+  const { status, sensors } = useSelector((store) => store.sensor);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchSensorList());
+    }
+    if (userStatus === "idle") {
+      dispatch(fetchUserList());
+    }
+  }, [status, dispatch]);
 
   const contentColumn = [
     {
@@ -43,6 +57,7 @@ export const AllElTable = () => {
       <DataGrid
         sx={{ height: 400 }}
         rows={users}
+        getRowId={(row) => row.identificationCode}
         columns={contentColumn.concat(viewColumn)}
         pageSize={5}
         rowsPerPageOptions={[5]}
@@ -50,7 +65,8 @@ export const AllElTable = () => {
       <h1>Sensors</h1>
       <DataGrid
         sx={{ height: 320 }}
-        rows={sensors}
+        getRowId={(row) => row.identificationCode}
+        rows={[...sensors]}
         columns={contentColumn.concat(viewColumn)}
         pageSize={4}
         rowsPerPageOptions={[4]}

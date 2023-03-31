@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 
 import legendReducer from "./features/legend/legendSlice";
 import mapReducer from "./features/mapWindow/mapSlice";
